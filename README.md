@@ -214,8 +214,16 @@ $.ajax
 
 Backbone.sync example,
 
-```
-TODO.
+```js
+Backbone.ajax = function() {
+	var defaults = arguments[0];
+	_.extend(defaults, {
+		username: username,
+		password: token
+	});
+
+	return Backbone.$.ajax.apply(Backbone.$, arguments);
+};
 ```
 
 ### Token validation
