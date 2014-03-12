@@ -1,8 +1,8 @@
 # Backbone.js + Express.js SPA boilerplate
 
-This project is supposed to be a *starter kit* helping the community build Single Page Application architectures based on Backbone.js and Express.js frameworks.
+This project is supposed to be a *starter kit* helping the community build Single Page Application (SPA) architectures based on Backbone.js and Express.js frameworks.
 
-A Pragmatic approach is key. The simplest implementation possible, just to show the way, not a finalized application. It covers aspects of front-end design, as well as open API.
+A Pragmatic approach is key. The aim of this project is to provide the  simplest possible implementation, to just show the way instead of providing a finalized application. It covers aspects of front-end design, as well as open APIs.
 
 You are the one, who can help project to grow. Join now and contribute, your help is much appreciated.
 
@@ -14,7 +14,7 @@ NOTE: It is still in **progress**. If you would like to contribute, please join 
 * [Application example](#example)
 * [Installation](#installation)
 * [Express.js](#expressjs)
-	* [Serving master page](#serving-master-page)
+	* [Serving the master page](#serving-master-page)
 	* [API end-points](#api-endpoints)
 	* [Authorization and CORS](#authorization-cors)
 * [Backbone.js](#backbonejs)
@@ -40,11 +40,11 @@ NOTE: It is still in **progress**. If you would like to contribute, please join 
 <a name="description"/>
 ## Description
 
-SPA infrastructure setup could be time consuming. It's a typical problem, to configure `requirejs`, initial routing and view manager, to prevent memory leaks. This project could be used as a good start to build your own single page application.
+The SPA infrastructure setup can be time consuming. Typical problems are, to configure `requirejs`, to setup the initial routing and view manager or to prevent memory leaks. This project may be used as a starting point to build your own single page application.
 
-This project is a complete and minimal setup for building single page applications running on ``Express.js`` framework as back-end and ``Backbone.js`` as front-end.
+This project is a complete and minimal setup for building an SPA running on the `Express.js` framework as the back-end and `Backbone.js` as the front-end.
 
-SPA itself is rather simple concept, but it requires some infrastructure to have in place, before building up a new application. This project already includes this infrastructure.
+The concept of SPAs itself is rather simple, but it requires some infrastructure to have in place, before building up a new application. This project already includes the necessary infrastructure.
 
 <a name="example"/>
 ## Application example
@@ -72,10 +72,16 @@ Install bower dependencies,
 $ bower install
 ```
 
+Run tests,
+
+```
+$ npm test
+```
+
 Run app (development mode),
 
 ```
-$ node app.js
+$ npm start
 ```
 
 <a name="expressjs"/>
