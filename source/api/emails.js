@@ -36,7 +36,7 @@ var emails = function (app) {
 		var email = req.body;
 		container.push(email);
 
-		res.send(201);
+		res.json({});
 	});
 };
 
