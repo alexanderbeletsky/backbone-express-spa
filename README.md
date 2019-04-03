@@ -1,8 +1,8 @@
 # Backbone.js + Express.js SPA boilerplate
 
-This project is supposed to be a *starter kit* helping the community build Single Page Application architectures based on Backbone.js and Express.js frameworks.
+This project is supposed to be a *starter kit* helping the community build Single Page Application (SPA) architectures based on Backbone.js and Express.js frameworks.
 
-A Pragmatic approach is key. The simplest implementation possible, just to show the way, not a finalized application. It covers aspects of front-end design, as well as open API.
+A Pragmatic approach is key. The aim of this project is to provide the  simplest possible implementation, to just show the way instead of providing a finalized application. It covers aspects of front-end design, as well as open APIs.
 
 You are the one, who can help project to grow. Join now and contribute, your help is much appreciated.
 
@@ -14,7 +14,7 @@ NOTE: It is still in **progress**. If you would like to contribute, please join 
 * [Application example](#example)
 * [Installation](#installation)
 * [Express.js](#expressjs)
-	* [Serving master page](#serving-master-page)
+	* [Serving the master page](#serving-master-page)
 	* [API end-points](#api-endpoints)
 	* [Authorization and CORS](#authorization-cors)
 * [Backbone.js](#backbonejs)
@@ -39,11 +39,11 @@ NOTE: It is still in **progress**. If you would like to contribute, please join 
 
 ## Description
 
-SPA infrastructure setup could be time consuming. It's a typical problem, to configure `requirejs`, initial routing and view manager, to prevent memory leaks. This project could be used as a good start to build your own single page application.
+The SPA infrastructure setup can be time consuming. Typical problems are, to configure `requirejs`, to setup the initial routing and view manager or to prevent memory leaks. This project may be used as a starting point to build your own single page application.
 
-This project is a complete and minimal setup for building single page applications running on ``Express.js`` framework as back-end and ``Backbone.js`` as front-end.
+This project is a complete and minimal setup for building an SPA running on the `Express.js` framework as the back-end and `Backbone.js` as the front-end.
 
-SPA itself is rather simple concept, but it requires some infrastructure to have in place, before building up a new application. This project already includes this infrastructure.
+The concept of SPAs itself is rather simple, but it requires some infrastructure to have in place, before building up a new application. This project already includes the necessary infrastructure.
 
 ## Application example
 
@@ -69,24 +69,30 @@ Install bower dependencies,
 $ bower install
 ```
 
+Run tests,
+
+```
+$ npm test
+```
+
 Run app (development mode),
 
 ```
-$ node app.js
+$ npm start
 ```
 
 ## Express.js
 
-[Express.js](http://expressjs.com/) is used as back-end development framework. It's simple and easy to configure for SPA.
+[Express.js](http://expressjs.com/) is used as back-end development framework. It's simple and easy to configure for SPAs.
 
-In API-oriented architecture back-end is responsible for 2 main purposes:
+In the API-oriented architecture of SPAs, the back-end serves two main purposes:
 
-* Serving master page html
-* Providing API end-points for web client
+* Serving the master page HTML
+* Providing API end-points for the web client
 
 ### Master page
 
-[Master page](views/master.ejs) is main (and typically one) html page returned from server. It includes all styles and javascript, provides very basic layout and placeholder for application.
+In SPAs there is typically only one [Master page](views/master.ejs), the ) the main HTML file returned from the server. It includes all styles and javascript, provides just a very basic layout with placeholders for the application.
 
 ```html
 <div class="container">
@@ -94,15 +100,15 @@ In API-oriented architecture back-end is responsible for 2 main purposes:
 </div>
 ```
 
-After master page is served back to client the rest of UI and logic is build by ``Backbone.js``.
+After the master page is served to the client, the rest of the UI and logic is build by ``Backbone.js``.
 
 ### Serving master page
 
-To serve master pages application includes middleware component [serveMaster.js](source/middleware/serveMaster.js). It would respond with master page html for any request, except the requests for `/api`, `/components`, `/css/` or `/js`.
+To serve the master page, the application uses the custom middleware component [serveMaster.js](source/middleware/serveMaster.js). It serves the master page for any request, except the requests for `/api`, `/components`, `/css/` or `/js`.
 
 ### API end-points
 
-API is HTTP, JSON based end-points. Sources are located at ``source/api``. Each API module returns a function that takes ``app`` instance and setup HTTP verb handler for a route.
+The API provides JSON based end-points for the HTTP requests. The API source files are located at ``source/api``. Each API module returns a function that takes an ``app`` instance and sets up an HTTP verb handler for the route.
 
 ```js
 module.exports = function (app) {
@@ -124,7 +130,7 @@ module.exports = function (app) {
 };
 ```
 
-To enable API end-point, you should modify ``app.js`` file, like
+To enable the API end-points, they have to be rquired in the main ``app.js`` file:
 
 ```js
 // api endpoints
@@ -135,34 +141,32 @@ require('./source/api/tasks')(app);
 
 ## Authorization and CORS
 
-While you design new open API, authorization is probably one of the most important topics to consider.
+Designing an open API, authorization is one of the most important topics to consider.
 
-There are many ways you can implement authorization. Choices you made will affect how much of API is usable and scalable. Before we jump in, I highly recommend blog post by [Vinay Sahni](https://twitter.com/veesahni) regarding [Pragmatic RESTFull API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api).
+There are many ways authorization can be implemented, and the chosen method will have a strong impact on how well the API will be usable and scalable. THis project is highly inspired by this blog post by [Vinay Sahni](https://twitter.com/veesahni) regarding [Pragmatic RESTFull APIs](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api).
 
-Traditional authorization algorithms are typically using some kind of `token-based` authorization. Means, each user of API is getting registered and special token (pseudo-random looking string) is issued and associated with that user. Token contains user identification + some meta info, encrypted with some simple algorithm as `base64`. For each request, users sends this token (in HTTP headers of query), server lookups for this token and if it finds match between encrypted `userId` and token, request treated as authenticated.
+Traditional authorization algorithms are typically using some kind of `token-based` authorization. That means, each user of an API is getting registered with a special token (pseudo-random looking string), which is issued and associated with that user. The token contains the user identification and some meta info, and is encrypted with some simple algorithm such as `base64`. For each request, the users sends this token (in the HTTP headers of each query) to the server, the server checks for a matching `userId` and treats the request as authenticated if it finds one.
 
-Tokens always have to be transported by secured channel as SSL.
+Tokens always have to be transported by a secured channel such as SSL.
 
-The only problem with that approach is that each request requires at least one *expensive* database call. This could be avoided by applying some cryptography on authorization procedure. One of the approaches is usage of self-signed [HMAC](https://en.wikipedia.org/wiki/Hash-based_message_authentication_code) tokens. It's easy to implement and it scales very nice.
+The only problem with that approach is, that each request requires at least one *expensive* database call. This can be avoided by applying some cryptography on the authorization procedure. One easy to implement and  scale approache is the usage of self-signed [HMAC](https://en.wikipedia.org/wiki/Hash-based_message_authentication_code) tokens.
 
 ### HMAC based API authorization
 
-The routine could be slitted to such steps:
+The HMAC routine works as follows:
 
-1. Client signs ups to API by sending `username` and `password`.
-2. Client get registered, `password` hashed and placed to `users` collection in DB.
-3. Authorization token is *issued*.
-4. Client receives token back.
-5. For all further requests client sends token as `password` in [authorization header](http://tools.ietf.org/html/rfc1945#section-10.2) of HTTP request.
-6. Server *validates* the token, if it's valid request treated as authenticated.
+1. The client signs up to the API by sending his `username` and `password`.
+2. The client get registered, the hashed `password` is saved to the `users` collection in the database.
+3. The authorization token is *issued*.
+4. The client receives the token back.
+5. For all further requests, the client sends the token as the `password` in the [authorization header](http://tools.ietf.org/html/rfc1945#section-10.2) of the HTTP request.
+6. The server *validates* the token and treats the request as authenticated if it succeeds.
 
-Note, token *validation* procedure doesn't require any DB request everything all depends on computation.
+Note that this type of token *validation* procedure doesn't require any database request, since the whole process depends entirely on computation.
 
 ### HMAC token
 
-Let's take a look how to issue new authorization token. We typically want to reduce token lifetime, in case it's stolen. So, we want to include some meta information about time it's issued as well it's owner. This information is concatenated and HMAC algorithm applied, using servers *private* key.
-
-After we add same info in open text and encrypt result by `base64`.
+Let's take a look how to issue new authorization token. We typically want to reduce the token lifetime, in case it is stolen. So we include some meta information about the exact time it was issued to the username. This information is concatenated and the HMAC algorithm is applied, using servers *private* key. As a lest step we we add the same info in open text  and encrypt result by `base64`.
 
 ```js
 var timespamp = moment();
@@ -172,13 +176,13 @@ var token = username + ';' + timespamp.valueOf() + ';' + hmac;
 var tokenBase64 = new Buffer(token).toString('base64');
 ```
 
-Here, `AUTH_SIGN_KEY` is private server key and `tokenBase64` is the final result, sent back to client.
+In this example, the `AUTH_SIGN_KEY` is the server's private key and `tokenBase64` is the final result, which is sent back to client.
 
 ### Authorization
 
-Client stores the token to cookie or localstorage and using it for *each* API request as part of Basic authentication header.
+The client stores the token to the cookie or to the localstorage and uses it for *each* API request as a part of the basic authentication header.
 
-Request.js example,
+Request.js example:
 
 ```js
 request.get({url: url, auth: {user: username, password: token}}, function (err, resp) {
@@ -188,7 +192,7 @@ request.get({url: url, auth: {user: username, password: token}}, function (err, 
 });
 ```
 
-jQuery example,
+jQuery example:
 
 ```js
 $.ajax
@@ -205,7 +209,7 @@ $.ajax
 });
 ```
 
-Backbone.sync example,
+Backbone.sync example:
 
 ```js
 Backbone.ajax = function() {
@@ -221,20 +225,20 @@ Backbone.ajax = function() {
 
 ### Token validation
 
-Now, server receives token back and request need to be authenticated.
+When the server receives the token back, the request gets authenticated as follows.
 
-1. Server decodes token `base64` and parses out all token information (simple split by ';').
-2. Server computes HMAC signature of received `username` and `timestamp` using the *same* private server key.
-3. It compares it with HMAC received in token.
-4. If HMAC's are different, request is not authorized, 401 reply.
-5. Otherwise, server checks token TTL, if expires , 401 reply.
-6. Otherwise request is authenticated.
+1. The server decodes the token with `base64` and parses out the token information (which is simply split by ';').
+2. The server computes HMAC signature of received `username` and `timestamp` using the *same* private server key.
+3. It compares it with the HMAC signatuure received in the token.
+4. If both HMACs are different, the request is not authorized and the server returns 401.
+5. Otherwise, the server checks the token's timestamp, and returns a 401 if it is expired.
+6. Otehrwise, the request is authenticated.
 
-If token is compromised or wrong, HMAC guarantees that signatures will never match, except attacker is aware of server private key.
+If the token is compromised or wrong, the HMAC procedure guarantees that the signatures will never match, except the attacker is aware the of server's private key.
 
 ### API Authorization implementation
 
-API exposes few methods,
+The authorization API exposes only three methods,
 
 ```
 /api/auth/signup
@@ -242,17 +246,17 @@ API exposes few methods,
 /api/auth/validate
 ```
 
-Signup, used as initial client registration. Login is called each time, new token have to issued. Validate is used to check token validity (it's used as internal method mostly).
+The `signup` method is used as the initial client registration. The `login` method is called each time, new token have to issued. The `validate` method is used to check the token validity (it's used as internal method mostly).
 
-There is [source/middleware/auth.js](source/middleware/auth.js) that exposes `createToken` and `validateToken` functions. Create token is applied to `signup` and `login` api methods, `validateToken` is applied on every API that requires authorization.
+The [source/middleware/auth.js](source/middleware/auth.js) file exposesthe  `createToken` and the `validateToken` functions. The `createToken` function is applied to the `signup` and `login` API methods, and the  `validateToken` function is applied on every API that requires authorization.
 
-Checkout [test/api/auth.specs.js](test/api/auth.specs.js) that specifies how authorization works in details, [source/api/auth.js](source/api/auth.js) for end-point implementation.
+The [test/api/auth.specs.js](test/api/auth.specs.js) file specifies how authorization works in detail and the [source/api/auth.js](source/api/auth.js) file specifies the API end-point implementation.
 
 ### CORS
 
-CORS ([Cross Origin Resource Sharing](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing)) have to be enabled to allow the API to be used from client applications, running on domain different than API deployment domain. For instance, your API can be deployed at `https://api.example.com`, but application running at `https://app.client.com`.
+CORS ([Cross Origin Resource Sharing](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing)) has to be enabled to allow the API to be used from client applications, running on a different domain than the APIs domain. For instance, the API might be deployed at `https://api.example.com`, and the at `https://app.example.com`.
 
-In order to allow that, special middleware function created, [/source/middleware/cors.js](/source/middleware/cors.js):
+The CORS middleware function  [/source/middleware/cors.js](/source/middleware/cors.js) takes care of that:
 
 ```js
 function cors() {
@@ -268,7 +272,7 @@ function cors() {
 module.exports = cors;
 ```
 
-It have be added during application initialization, like:
+The CORS middleware function has to be added during the application initialization:
 
 ```js
 	app.use(middleware.cors());
